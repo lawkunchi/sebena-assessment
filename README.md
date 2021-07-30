@@ -8,9 +8,9 @@ Explore the navigation to add users and workout sessions
 
 To insitalise backend services navigate to the `/app-core` folder :
 
-add `ATLAS_URI` to the env file to connect to mongo DB 
+create `.env` file and add `ATLAS_URI` to connect to mongo DB 
 
-run `npm intsall`
+run `npm intsall` 
 
 Run:
 
@@ -23,7 +23,10 @@ Server will start running at  [http://localhost:5000](http://localhost:5000)
 
 To Start the app navigate to the main app-directory
 
+Add `.env` file with `REACT_APP_REST_URL` variable pointing to  `http://localhost:5000` server URL
+
 run `npm intsall`
+
 
 `npm start` to start the app
 
