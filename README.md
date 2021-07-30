@@ -2,30 +2,31 @@
 
 This app let's you create user workout sessions 
 
-
+Explore the navigation to add users and workout sessions
 
 ## Backend
 
-To insitalise backend services navigate to the `/app-core` folder and run:
+To insitalise backend services navigate to the `/app-core` folder :
 
-### `npm start`
+add `ATLAS_URI` to the env file to connect to mongo DB 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+run `npm intsall`
 
-Explore the menu to perform different actions provided
+Run:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+`nodemon server` to start the server
 
-### `npm test`
+Server will start running at  [http://localhost:5000](http://localhost:5000) 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### Front End
 
-Runs the app in the development mode.\
+To Start the app navigate to the main app-directory
+
+run `npm intsall`
+
+`npm start` to start the app
+
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### `npm run eject`
