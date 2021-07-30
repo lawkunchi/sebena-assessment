@@ -4,7 +4,7 @@ This app let's you create user workout sessions
 
 ## Backend
 
-To insitalise backend services navigate to the `/app-core` folder :
+To instantiate backend services navigate to the `/app-core` folder :
 
 Create `.env` file and add `ATLAS_URI` to connect to mongo DB 
 
