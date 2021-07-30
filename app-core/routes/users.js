@@ -17,4 +17,45 @@ router.route('/add').post(( req, res) => {
 
 });
 
+/*
+**
+* Get user by id
+*/
+
+router.route('/:id').get(( req, res) => {
+	User.findById(req.params.id)
+	.then(user => res.json(user))
+	.catch(err => res.status(400).json('Error:' + err));
+});
+
+
+/*
+**
+* Delete a user
+*/
+
+router.route('/:id').delete(( req, res) => {
+	User.findByIdAndDelete(req.params.id)
+	.then(user => res.json('User deleted!'))
+	.catch(err => res.status(400).json('Error:' + err));
+});
+
+
+router.route('/update/:id').post(( req, res) => {
+	User.findById(req.params.id)
+	.then(user => {
+		user.username = req.body.username;
+		user.description = req.body.description;
+		user.duration = Number(req.body.duration);
+		user.date = Date.parse(req.body.date);
+
+		user.save()
+		.then(() => res.json('User updated!'))
+		.catch(err => res.status(400).json('Error' + err));
+
+	})
+	.catch(err => res.status(400).json('Error:' + err));
+});
+
+
 module.exports = router;

@@ -5,12 +5,15 @@ export default class User extends Component{
 
 	render() {
 
-		const {user} = this.props
+		const {user, deleteUser} = this.props
 
 		return (
 				<tr>
+					<td>{user._id}</td>
 					<td>{user.username}</td>
-					<td>{user.sds}</td>
+					<td>
+						<Link to = {"/edit/user/"+user._id}> Edit</Link> | <Link to="#" onClick={() => {deleteUser(user._id)}}>Delete</Link>
+					</td>
 				</tr>
 		)
 	}

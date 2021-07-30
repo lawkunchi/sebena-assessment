@@ -11,10 +11,10 @@ export default class Exercise extends Component{
 				<tr>
 					<td>{exercise.username}</td>
 					<td>{exercise.description}</td>
-					<td>{exercise.duration}</td>
+					<td>{exercise.repetitions}</td>
 					<td>{exercise.date.substring(0,10)}</td>
 					<td>
-						<Link to = {"/edit/"+exercise._id}> edit</Link> | <Link to="#" onClick={() => {deleteExercise(exercise._id)}}>Delete</Link>
+						<Link to = {"/edit/"+exercise._id}> Edit</Link> | <Link to="#" onClick={() => {deleteExercise(exercise._id)}}>Delete</Link>
 					</td>
 				</tr>
 		)

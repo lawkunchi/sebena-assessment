@@ -4,52 +4,59 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 
 
-export default class EditExercise extends Component{
+export default class CreateExercise extends Component{
 
 	constructor(props) {
 		super(props);
 
 		this.onChangeUsername = this.onChangeUsername.bind(this);
 		this.onChangeDescription = this.onChangeDescription.bind(this);
-		this.onChangeDuration = this.onChangeDuration.bind(this);
+		this.onChangeRepetitions = this.onChangeRepetitions.bind(this);
 		this.onChangeDate = this.onChangeDate.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 
 		this.state = {
 			username: '',
 			description: '',
-			duration: 0,
+			repetitions: 0,
 			date: new Date(),
-			users: []
+			users: [],
 		}
 	}
 
 	componentDidMount() {
 
-		axios.get('http://localhost:5000/exercises/'+this.props.match.params.id)
-		.then(res => {
-			this.setState({
-				username: res.data.username,
-				description: res.data.description,
-				duration: res.data.duration,
-				date: new Date(res.data.date)
-			})
-
-		});
-
-		axios.get('http://localhost:5000/users/')
+		axios.get(process.env.REACT_APP_REST_URL + '/users/')
 		.then(res => {
 
 			if(res.data.length > 0) {
 				this.setState({
 					users: res.data.map(user => user.username),
+					username: res.data[0].username,
 				})
 
+			}
 
-
+			else {
+				this.setState({
+					users: ['test-user'],
+					username: 'test',
+				})
 			}
 		});
 
+		if(this.props.match.params.id) {
+			axios.get(process.env.REACT_APP_REST_URL + '/exercises/' +this.props.match.params.id)
+			.then(res => {
+				this.setState({
+					username: res.data.username,
+					description: res.data.description,
+					repetitions: res.data.repetitions,
+					date: new Date(res.data.date)
+				})
+
+			});
+		}
 
 	}
 
@@ -67,9 +74,9 @@ export default class EditExercise extends Component{
 	}
 
 
-	onChangeDuration = e => {
+	onChangeRepetitions = e => {
 		this.setState({
-			duration: e.target.value
+			repetitions: e.target.value
 		});
 	}
 
@@ -84,14 +91,22 @@ export default class EditExercise extends Component{
 		const exercise = {
 			username: this.state.username,
 			description: this.state.description,
-			duration: this.state.duration,
+			repetitions: this.state.repetitions,
 			date: this.state.date,
 		}
 
 		console.log(exercise);
 
-		axios.post('http://localhost:5000/exercises/update/'+this.props.match.params.id, exercise)
-		.then(res => console.log(res.data));
+		if(this.props.match.params.id) {
+			axios.post(process.env.REACT_APP_REST_URL + '/exercises/update/' +this.props.match.params.id, exercise)
+			.then(res => console.log(res.data));
+		}
+
+		else {
+			axios.post(process.env.REACT_APP_REST_URL + '/exercises/add/', exercise)
+			.then(res => console.log(res.data));
+		}
+
 
 		// window.location = "/";
 	}
@@ -102,8 +117,8 @@ export default class EditExercise extends Component{
 		 if (!users)
 		 	return <p>Loading</p>;
 			return (
-				<div> 
-					<h3>Edit Exercise Log</h3>
+				<div className="container w-75"> 
+					<h3>{this.props.match.params.id? "Edit Session" : "Add a Session"}</h3>
 					<form onSubmit={this.onSubmit}>
 						<div className="form-group">
 							<label>Username:</label>
@@ -123,8 +138,8 @@ export default class EditExercise extends Component{
 						</div>
 
 						<div className="form-group">
-							<label>Duration (mins):</label>
-							<input type="text" required className="form-control" value={this.state.duration} onChange={this.onChangeDuration}/>
+							<label>Repetitions (reps):</label>
+							<input type="text" required className="form-control" value={this.state.repetitions} onChange={this.onChangeRepetitions}/>
 						</div>
 
 
@@ -135,7 +150,7 @@ export default class EditExercise extends Component{
 						<br/>
 
 						<div className="form-group">
-							<input type="submit" value="Submit" className="btn btn-primary"/>
+							<input type="submit" value={this.props.match.params.id? "Update" : "Submit"} className="btn btn-primary"/>
 						</div>
 
 					</form>
