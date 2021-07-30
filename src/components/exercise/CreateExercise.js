@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
-
+import Message from '../utils/Message'
 
 export default class CreateExercise extends Component{
 
@@ -21,6 +21,8 @@ export default class CreateExercise extends Component{
 			repetitions: 0,
 			date: new Date(),
 			users: [],
+			message: "",
+			error: "",
 		}
 	}
 
@@ -52,13 +54,14 @@ export default class CreateExercise extends Component{
 					username: res.data.username,
 					description: res.data.description,
 					repetitions: res.data.repetitions,
-					date: new Date(res.data.date)
+					date: new Date(res.data.date),
 				})
 
 			});
 		}
 
 	}
+				
 
 	onChangeUsername = e => {
 		this.setState({
@@ -99,16 +102,20 @@ export default class CreateExercise extends Component{
 
 		if(this.props.match.params.id) {
 			axios.post(process.env.REACT_APP_REST_URL + '/exercises/update/' +this.props.match.params.id, exercise)
-			.then(res => console.log(res.data));
+			.then(res => 
+				this.setState({
+					message: res.data
+				})				);
 		}
 
 		else {
 			axios.post(process.env.REACT_APP_REST_URL + '/exercises/add/', exercise)
-			.then(res => console.log(res.data));
+			.then(res => 
+				this.setState({
+					message: res.data
+				})				);
 		}
 
-
-		// window.location = "/";
 	}
  
  
@@ -118,6 +125,8 @@ export default class CreateExercise extends Component{
 		 	return <p>Loading</p>;
 			return (
 				<div className="container w-75"> 
+				<Message message={this.state.message} type="success"></Message>
+			<Message message={this.state.error} type="danger"></Message>
 					<h3>{this.props.match.params.id? "Edit Session" : "Add a Session"}</h3>
 					<form onSubmit={this.onSubmit}>
 						<div className="form-group">

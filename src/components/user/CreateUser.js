@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
+import Message from '../utils/Message'
 
 export default class CreateUser extends Component {
 
@@ -11,6 +12,8 @@ export default class CreateUser extends Component {
 
 		this.state = {
 			username: '',
+			message: "",
+			error: ""
 		}
 	}
 
@@ -38,26 +41,53 @@ export default class CreateUser extends Component {
 
 	onSubmit(e) {
 		e.preventDefault();
+
+		// this.refs.btn.setAttribute("disabled", "disabled");
+
 		const user = {
 			username: this.state.username
 		}
 
+
 		if(this.props.match.params.id) {
 			axios.post(process.env.REACT_APP_REST_URL + '/users/update/'+this.props.match.params.id, user)
-			.then(res => console.log(res.data));
+			.then(res => 
+				this.setState({
+					message: res.data
+				})				
+			)
+			.catch((err) => {
+				this.setState({
+					error: "Oops there's an error"
+				})	
+			});
 		}
+		
 
 		else {
 			axios.post(process.env.REACT_APP_REST_URL + '/users/add', user)
-			.then(res => console.log(res.data));
+			.then(res => 
+				
+				this.setState({
+					message: res.data
+				})	
+			)
+			.catch((err) => {
+				this.setState({
+					error: "Oops there's an error"
+				})	
+			});
+
 		}
+
 		
 	}
 
 	render() {
-
 		return (
-			<div className="container w-75"> 
+			<div className="container w-75">
+			<Message message={this.state.message} type="success"></Message>
+			<Message message={this.state.error} type="danger"></Message>
 				<h3>{this.props.match.params.id? "Edit User" : "Create User"}</h3>
 				<form onSubmit={this.onSubmit}>
 					
@@ -70,7 +100,7 @@ export default class CreateUser extends Component {
 
 
 					<div className="form-group">
-						<input type="submit" value={this.props.match.params.id? "Update" : "Submit"} className="btn btn-primary"/>
+						<input ref="btn" type="submit" value={this.props.match.params.id? "Update" : "Submit"} className="btn btn-primary"/>
 					</div>
 
 				</form>
